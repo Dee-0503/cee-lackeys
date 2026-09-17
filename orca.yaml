@@ -1,0 +1,71 @@
+# orca.yaml
+hooks:
+  # 设置脚本：创建新工作树后立即运行
+  setup:
+    description: "终极 Git 工作流：自动执行 git init、创建 GitHub 仓库、支持 main 初始化以及新分支切出推送"
+    commands:
+      - name: "全自动 Git & GitHub 生命周期管理"
+        run: |
+          # 1. 初始化基础变量
+          TARGET_BRANCH="${ORCA_BRANCH:-main}"
+          REPO_NAME=$(basename "${ORCA_PRIMARY_ROOT:-$PWD}")
+          
+          echo "🔍 正在分析项目环境 [目标分支: $TARGET_BRANCH, 仓库名: $REPO_NAME]..."
+
+          # 2. 核心防御一：如果完全没有初始化过 git，自动执行 git init
+          if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+              echo "🗂️ 检测到当前目录尚未启用 Git，正在自动执行 'git init'..."
+              git init
+              # 显式将默认分支设为 main
+              git branch -M main
+          fi
+
+          # 3. 核心防御二：纯空仓库初始化（刚 init 完，本地连第一个 commit 都没有）
+          if ! git rev-parse --verify HEAD >/dev/null 2>&1; then
+              echo "⚠️ 检测到全新空仓库，正在完成 main 分支的首次提交..."
+              if [ ! -f README.md ]; then
+                  echo "# $REPO_NAME" > README.md
+                  echo "📄 已自动创建基础 README.md"
+              fi
+              git add .
+              git commit -m "Initial commit"
+              git branch -M main
+              echo "✅ 本地 main 分支已成功创建并完成首次提交。"
+          fi
+
+          # 4. 远程仓库防御：通过 gh cli 一键创建并关联 GitHub 远程仓库
+          if ! git remote | grep -q "origin"; then
+              echo "🌐 未检测到远程仓库，正在通过 gh cli 一键创建 GitHub 仓库..."
+              # 默认创建为公开仓库(--public)，可根据需要修改为 --private
+              gh repo create "$REPO_NAME" --public --source="${ORCA_PRIMARY_ROOT:-.}" --remote=origin
+              echo "✅ GitHub 远程仓库创建成功并关联为 origin"
+          fi
+
+          # 5. 场景分支切换：主分支已就绪，当前正在为【新分支】建立工作树
+          if [ "$TARGET_BRANCH" != "main" ]; then
+              # 检查本地是否已经有这个目标分支
+              if git show-ref --verify --quiet "refs/heads/$TARGET_BRANCH"; then
+                  echo "🌿 本地已存在分支 [$TARGET_BRANCH]，正在切换..."
+                  git checkout "$TARGET_BRANCH"
+              else
+                  echo "🌿 本地未发现分支 [$TARGET_BRANCH]，正在基于最新 main 分支创建它..."
+                  # 确保切换回 main 并同步远端最新状态
+                  git checkout main
+                  git pull origin main --rebase 2>/dev/null || true
+                  
+                  # 基于 main 创建并切换到新分支
+                  git checkout -b "$TARGET_BRANCH"
+                  
+                  # 为新分支做一次默认的基准提交
+                  echo "创建分支 $TARGET_BRANCH" >> CHANGELOG.md
+                  git add CHANGELOG.md
+                  git commit -m "Initialize branch $TARGET_BRANCH" 2>/dev/null || true
+                  echo "✅ 新分支 [$TARGET_BRANCH] 已成功基于 main 创建。"
+              fi
+          fi
+
+          # 6. 统一推送当前分支到 GitHub 并建立上游追踪
+          echo "📤 正在将当前分支 [$TARGET_BRANCH] 同步推送到 GitHub..."
+          git push -u origin "$TARGET_BRANCH"
+
+          echo "🎉 [成功] 从零初始化的 Git 与远程分支同步已全部自动完成！"
