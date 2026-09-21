@@ -9,6 +9,10 @@ import json
 from pathlib import Path
 
 
+def allowed_path(relative: str) -> bool:
+    return relative == ".claude-obsidian.json" or relative.startswith(("inbox/", ".raw/", "wiki/"))
+
+
 def digest(path: Path) -> str:
     value = hashlib.sha256()
     with path.open("rb") as handle:
@@ -32,7 +36,7 @@ def main() -> int:
     for entry in manifest["files"]:
         relative = entry["path"]
         path = Path(relative)
-        if path.is_absolute() or ".." in path.parts or relative in seen:
+        if path.is_absolute() or ".." in path.parts or relative in seen or not allowed_path(relative):
             raise SystemExit(f"unsafe or duplicate manifest path: {relative}")
         seen.add(relative)
         target = package / "vault" / path
