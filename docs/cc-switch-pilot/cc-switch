@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+umask 077
+export CC_SWITCH_CONFIG_DIR=/home/cee/data/cc-switch-pilot
+export CODEX_HOME=/home/cee/data/codex-pilot/config
+exec /home/cee/apps/cc-switch-pilot/releases/5.10.5/cc-switch "$@"

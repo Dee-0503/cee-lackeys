@@ -1,0 +1,92 @@
+# Pilot configuration v1. Not the official GKE deployment.
+name: cumora-pilot
+x-log: &log
+  driver: local
+  options: {max-size: 10m, max-file: '3'}
+x-app: &app
+  image: cumora-pilot/server@sha256:be4c5da6a316be975d87b1e7d7d857a60ab1e6ff3b0cc8e543f3dd7192a5ec03
+  pull_policy: never
+  user: '10001:10001'
+  working_dir: /app
+  entrypoint: [/usr/bin/tini, '--', node, /pilot/runtime.mjs]
+  env_file: ./runtime.env
+  environment:
+    NODE_ENV: production
+    PORT: '5181'
+    INSTANCE_ID: cumora-pilot
+    REDIS_URL: redis://redis:6379
+    ENABLE_SCANNER: 'false'
+    ENABLE_IDLE: 'false'
+    IDLE_INTERVAL_MS: '0'
+    ENABLE_AGENT_POD_GC: 'false'
+    ENABLE_CHROME_PVC_GC: 'false'
+    ENABLE_CLUSTER_MONITOR: 'false'
+    EMAIL_RETRY_INTERVAL_MS: '0'
+    WORKSPACE_RUNTIME_CLEANUP_ENABLED: 'false'
+  volumes:
+    - ./runtime.mjs:/pilot/runtime.mjs:ro
+    - ./secrets:/run/secrets:ro
+  networks: [backend]
+  security_opt: [no-new-privileges:true]
+  cap_drop: [ALL]
+  logging: *log
+services:
+  postgres:
+    image: postgres:16.10-bookworm@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74
+    environment:
+      POSTGRES_USER: cumora
+      POSTGRES_DB: cumora
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    volumes:
+      - /home/cee/data/cumora-pilot/postgres:/var/lib/postgresql/data
+      - ./secrets/postgres_password:/run/secrets/postgres_password:ro
+    networks: [backend]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U cumora -d cumora']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    logging: *log
+  redis:
+    image: redis:7.4.5-bookworm@sha256:90e7a336d044f1abc9e9dbc05d65566850896d11453bbd1dd0fb7e5059f0e8fb
+    command: [redis-server, --appendonly, 'yes', --appendfsync, everysec]
+    volumes:
+      - /home/cee/data/cumora-pilot/redis:/data
+    networks: [backend]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    logging: *log
+  migration:
+    <<: *app
+    command: [migrate]
+    restart: 'no'
+    depends_on:
+      postgres: {condition: service_healthy}
+  server:
+    <<: *app
+    command: [server:start]
+    ports: ['127.0.0.1:15181:5181']
+    volumes:
+      - ./runtime.mjs:/pilot/runtime.mjs:ro
+      - ./secrets:/run/secrets:ro
+      - /home/cee/data/cumora-pilot/uploads:/app/server/uploads
+    networks: [backend, egress]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      migration: {condition: service_completed_successfully}
+    healthcheck:
+      test: [CMD, node, -e, 'fetch("http://127.0.0.1:5181/api/health").then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))']
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+    restart: unless-stopped
+networks:
+  backend: {internal: true}
+  egress: {}

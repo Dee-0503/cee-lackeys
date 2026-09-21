@@ -1,0 +1,11 @@
+# Optional override. Keep the default compose.yaml unchanged.
+# Prepare the host paths and export both variables before using this file.
+services:
+  server:
+    environment:
+      WIKI_MIRROR_ROOT: /app/wiki-published/current
+      WIKI_SUBMISSIONS_ROOT: /app/wiki-submissions/inbox
+      WIKI_WRITE_MODE: submission-only
+    volumes:
+      - ${CEE_WIKI_PUBLISHED_ROOT:?set CEE_WIKI_PUBLISHED_ROOT}:/app/wiki-published:ro
+      - ${CEE_WIKI_SUBMISSIONS_ROOT:?set CEE_WIKI_SUBMISSIONS_ROOT}:/app/wiki-submissions:rw

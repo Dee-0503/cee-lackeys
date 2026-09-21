@@ -1,0 +1,24 @@
+# Server pilot only; no local Mac paths, plugins, MCPs or hooks.
+model_provider = "custom"
+model = "gpt-6-astra"
+disable_response_storage = true
+# User-supplied context limits; provider support still requires validation.
+model_context_window = 1000000
+model_auto_compact_token_limit = 900000
+model_reasoning_effort = "low"
+personality = "pragmatic"
+sandbox_mode = "workspace-write"
+approval_policy = "never"
+allow_login_shell = false
+
+[shell_environment_policy]
+inherit = "none"
+
+[model_providers.custom]
+name = "Huitex"
+base_url = "https://api.huitex.top/v1"
+wire_api = "responses"
+requires_openai_auth = true
+
+[projects."/home/cee/data/codex-pilot/workspace"]
+trust_level = "trusted"

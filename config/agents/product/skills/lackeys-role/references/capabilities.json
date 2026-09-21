@@ -1,0 +1,35 @@
+{
+  "schema": "lackeys.capabilities.v1",
+  "as_of": "2026-09-20",
+  "available": {
+    "cumora_identity_workspace": "原生身份绑定 CLI 与每 Agent workspace",
+    "cumora_conversations": "当前身份获准的会话检索、读取与回复",
+    "cumora_kanban_calendar": "原生命令存在；写入须遵循用户具体任务与权威系统选择，尚无完整提醒验收"
+  },
+  "not_connected": {
+    "canonical_wiki": "云端 canonical Wiki core／受检事务连接器",
+    "audio_pipeline": "音频原件长期存储与转写服务",
+    "live_web": "经验证的外部检索／抓取工具",
+    "orca": "Cumora sandbox 到桌面／云端 Orca 连接与项目映射",
+    "server_execution": "专用服务器 CLI 到外部沙箱／执行节点和授权服务器",
+    "reliable_notifications": "端到端提醒送达及官方 iOS 自托管推送"
+  },
+  "isolation": {
+    "identity": "Cumora Agent 身份与 workspace 分离",
+    "runtime": "保留现有 Codex 受限 sandbox、无全网访问",
+    "role_tools": "角色行为规则；共享 Cumora CLI 不提供本次验证过的逐角色完整硬 ACL",
+    "project_context": "用户不要求业务项目／任务级独立上下文；沿用每 Agent 自己的连续会话。项目名和任务 ID 仅在有助于定位事项时使用。"
+  },
+  "rules": [
+    "接口存在不等于已配置或通过端到端验收",
+    "调用失败不得说任务已完成",
+    "本文件是部署时能力快照，变更需实际证据"
+  ],
+  "instruction_loading": {
+    "ui_system_prompt": "核心职责完整保存于 UI；本次 BYOA 兼容修复会将该字段显式注入 standing prompt，不依赖 AGENTS 自动发现",
+    "cumora_workspace": "服务器仅保留按需技能与引用副本；身份、职责和原则完整保留在 UI 系统提示词。",
+    "local_files": "原生 .agents/skills/lackeys-role 供按需读取；不再部署重复身份／原则文件。",
+    "codex_rules": "只用于 .rules 命令执行策略；本次不创建、不放业务文档",
+    "project_context": "不要求业务项目／任务级独立上下文，沿用各 Agent 连续会话"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "lackeys.handoff.v1",
+  "required": [
+    "task_id",
+    "source_refs",
+    "objective",
+    "constraints",
+    "deliverables",
+    "acceptance",
+    "owner_role",
+    "reply_to",
+    "status"
+  ],
+  "example": {
+    "task_id": "由权威任务系统返回；未建时用来源定位关联",
+    "project_id": "可选：已知且有助于定位时填写，无需用户建立独立项目空间",
+    "source_refs": [
+      {
+        "source_id": "会议／消息／文档标识",
+        "locator": "时间戳／页码／消息 ID"
+      }
+    ],
+    "objective": "本次要完成的目标",
+    "constraints": [
+      "用户授权范围与截止日期；缺失字段明确待确认"
+    ],
+    "deliverables": [
+      "具体结果与来源"
+    ],
+    "acceptance": [
+      "可核验的完成标准"
+    ],
+    "owner_role": "下一位主责角色",
+    "reply_to": "原会话或原任务 ID",
+    "status": "proposed|accepted|running|blocked|delivered|verified",
+    "execution": {
+      "host": "涉及执行时填写",
+      "repo": "项目映射",
+      "base_revision": "基线",
+      "request_id": "幂等请求标识"
+    }
+  },
+  "optional": [
+    "project_id"
+  ]
+}

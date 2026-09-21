@@ -1,0 +1,19 @@
+[Unit]
+Description=Cumora pilot fixed v0.18.6 BYOA daemon
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/home/cee/data/codex-pilot/.cumora/computer.json
+
+[Service]
+Type=simple
+User=codex-pilot
+Group=codex-pilot
+WorkingDirectory=/home/cee/data/codex-pilot/workspace
+ExecStart=/home/cee/apps/cumora-byoa-pilot/bin/node /home/cee/apps/cumora-byoa-pilot/launch.mjs
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=45
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

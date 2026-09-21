@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cee.example/schemas/wiki-publish-manifest.v1.json",
+  "title": "Wiki publish manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "revision", "generated_at", "source", "files"],
+  "properties": {
+    "schema": {"const": "lackeys.wiki-publish-manifest.v1"},
+    "revision": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vault_root", "allowlist"],
+      "properties": {
+        "vault_root": {"type": "string"},
+        "allowlist": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "size"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^(\\.claude-obsidian\\.json|inbox/|\\.raw/|wiki/)"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "size": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  }
+}

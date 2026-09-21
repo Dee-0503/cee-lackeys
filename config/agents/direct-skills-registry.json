@@ -1,0 +1,125 @@
+{
+  "schema": "cee-lackeys.direct-skills.v1",
+  "generated_at": "2026-09-21",
+  "update_policy": "pinned-commit-check; review license and upstream changes before updating; no floating branch installs",
+  "packages": {
+    "wiki": {
+      "repo": "AgriciDaniel/claude-obsidian",
+      "ref": "32ac5a02c4e082e4a5628ca810776375e134708e",
+      "license": "MIT",
+      "source_root": "/Users/ceemac/cee-wiki/.vendor/claude-obsidian/skills"
+    },
+    "doc-coauthoring": {
+      "repo": "anthropics/skills",
+      "ref": "34040c9c568585f6929bedeaad110ad08f079624",
+      "license": "Apache-2.0",
+      "source_root": "/tmp/skill-upstreams/anthropics"
+    },
+    "writing-prds": {
+      "repo": "RefoundAI/lenny-skills",
+      "ref": "13598cc54e09399bc1bc1398b0fca284efb2f",
+      "license": "MIT",
+      "source_root": "/tmp/skill-upstreams/lenny"
+    },
+    "scrapling-official": {
+      "repo": "D4Vinci/Scrapling",
+      "ref": "2b160ee18bfee79bb0115e2d9e9c746c8d9bf4c9",
+      "license": "BSD-3-Clause",
+      "source_root": "/tmp/skill-upstreams/scrapling"
+    },
+    "orca-cli": {
+      "repo": "stablyai/orca",
+      "ref": "9fbdfc592cbbdbe03a0ac7172064580c59bb275d",
+      "license": "MIT",
+      "source_root": "/tmp/skill-upstreams/orca"
+    },
+    "orchestration": {
+      "repo": "stablyai/orca",
+      "ref": "9fbdfc592cbbdbe03a0ac7172064580c59bb275d",
+      "license": "MIT",
+      "source_root": "/tmp/skill-upstreams/orca"
+    },
+    "content-research-writer": {
+      "repo": "ComposioHQ/awesome-claude-skills",
+      "ref": "be2a406907dbc61b73e6827ded415c96139d13a2",
+      "license": "Apache-2.0",
+      "source_root": "/tmp/skill-upstreams/composio"
+    },
+    "openai-whisper": {
+      "repo": "openclaw/openclaw",
+      "ref": "73ab2cf70cdaf12b981d676896e80b9d75140e23",
+      "license": "MIT",
+      "source_root": "/tmp/skill-upstreams/openclaw"
+    },
+    "prd-development": {
+      "repo": "deanpeters/Product-Manager-Skills",
+      "ref": "1b5a524ebb95e9497fa3f25002d8b8ec528d4444",
+      "license": "NOASSERTION (upstream metadata; review before redistribution)",
+      "source_root": "/tmp/skill-upstreams/pm"
+    }
+  },
+  "roles": {
+    "coordinator": [
+      "wiki-query",
+      "save",
+      "doc-coauthoring"
+    ],
+    "product": [
+      "wiki-query",
+      "save",
+      "writing-prds",
+      "doc-coauthoring",
+      "prd-development"
+    ],
+    "meeting": [
+      "wiki-query",
+      "save",
+      "doc-coauthoring",
+      "openai-whisper"
+    ],
+    "tasks": [
+      "wiki-query",
+      "save"
+    ],
+    "research": [
+      "wiki-query",
+      "save",
+      "scrapling-official",
+      "content-research-writer"
+    ],
+    "subscriptions": [
+      "wiki-query",
+      "save",
+      "scrapling-official"
+    ],
+    "knowledge": [
+      "wiki",
+      "wiki-ingest",
+      "wiki-query",
+      "wiki-lint",
+      "wiki-retrieve",
+      "save",
+      "wiki-fold",
+      "wiki-mode",
+      "wiki-cli",
+      "think",
+      "autoresearch",
+      "canvas",
+      "obsidian-bases",
+      "obsidian-markdown",
+      "defuddle"
+    ],
+    "engineering": [
+      "wiki-query",
+      "save",
+      "orca-cli",
+      "orchestration"
+    ],
+    "operations": [
+      "wiki-query",
+      "save"
+    ]
+  },
+  "prompt_policy_version": "2026-09-21.11",
+  "prompt_policy": "All visible responses use zh-CN; acknowledgment-only replies stay silent; deliverables require a verifiable side effect; durable work dispatch prefers Kanban, time triggers use Calendar, short clarification uses DM. Multi-agent work involving 2+ agents may collaborate in a group; 3+ bots usually use an Iris-created group; Iris stays out of unrelated professional discussion unless coordinating, mentioned, verifying, or summarizing; non-targeted agents stay silent. Visible deliverables use Cumora Documents or inline chat visuals; local/server paths are never the sole delivery. Cumora document deliveries must use doc ls/create/read/append and return document id; local paths are never delivery. Calendar manages when; Kanban manages stage; personal Cee tasks default Calendar; Iris owns large boards; Theo owns Cee task follow-up."
+}

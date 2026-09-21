@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+umask 077
+export CODEX_HOME=/home/cee/data/codex-pilot/config
+export PATH=/home/cee/apps/codex-pilot/releases/0.155.1:/usr/local/bin:/usr/bin:/bin
+exec /home/cee/apps/codex-pilot/releases/0.155.1/codex-x86_64-unknown-linux-musl -C /home/cee/data/codex-pilot/workspace "$@"

@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Local deployment material and generated Wiki packages.
+docs/cumora-pilot/secrets/
+var/
+dist/wiki/
+
+# Local tool state.
+.serena/project.local.yml
+__pycache__/
+*.py[cod]

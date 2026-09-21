@@ -1,0 +1,7 @@
+#!/bin/sh
+# Explicit provider bootstrap; Cumora's security arguments remain authoritative.
+exec /home/cee/apps/codex-pilot/releases/0.155.1/codex-x86_64-unknown-linux-musl \
+  -c 'model_provider="custom"' \
+  -c 'model_providers.custom={name="Huitex",base_url="https://api.huitex.top/v1",wire_api="responses",requires_openai_auth=true}' \
+  -c 'model_reasoning_effort="low"' \
+  "$@"
