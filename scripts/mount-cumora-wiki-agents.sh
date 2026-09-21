@@ -7,6 +7,7 @@ set -euo pipefail
 
 WIKI_ROOT=/home/cee/data/cee-wiki/canonical
 CORE_ROOT=/home/cee/data/cee-wiki/core
+COMMON_SKILL_ROOT=/home/cee/data/cee-wiki/agent-skills/cumora-operations
 AGENTS_ROOT=/home/cee/data/codex-pilot/.cumora/agents
 AGENTS=(
   atlas-12fd
@@ -28,7 +29,8 @@ require_root() {
   test "$(id -u)" -eq 0 || { echo 'must run as root' >&2; exit 1; }
   test "$(realpath "$WIKI_ROOT")" = "$WIKI_ROOT"
   test "$(realpath "$CORE_ROOT")" = "$CORE_ROOT"
-  test -d "$WIKI_ROOT" && test -d "$CORE_ROOT"
+  test "$(realpath "$COMMON_SKILL_ROOT")" = "$COMMON_SKILL_ROOT"
+  test -d "$WIKI_ROOT" && test -d "$CORE_ROOT" && test -f "$COMMON_SKILL_ROOT/SKILL.md"
 }
 
 mount_one() {
@@ -77,6 +79,7 @@ start() {
     test "$(realpath "$home")" = "$home"
     mount_one "$WIKI_ROOT" "$home/workspace/cee-wiki"
     mount_one "$CORE_ROOT" "$home/.vendor/claude-obsidian" 1
+    mount_one "$COMMON_SKILL_ROOT" "$home/.agents/skills/cumora-operations" 1
     install_skill_links "$home"
   done
 }
@@ -85,6 +88,7 @@ stop() {
   require_root
   for ((i=${#AGENTS[@]}-1; i>=0; i--)); do
     home="$AGENTS_ROOT/${AGENTS[$i]}"
+    unmount_one "$home/.agents/skills/cumora-operations"
     unmount_one "$home/.vendor/claude-obsidian"
     unmount_one "$home/workspace/cee-wiki"
   done

@@ -5,6 +5,7 @@ Before=cumora-byoa-pilot.service
 RequiresMountsFor=/home/cee/data/codex-pilot/.cumora/agents /home/cee/data/cee-wiki
 ConditionPathExists=/home/cee/data/cee-wiki/canonical
 ConditionPathExists=/home/cee/data/cee-wiki/core
+ConditionPathExists=/home/cee/data/cee-wiki/agent-skills/cumora-operations/SKILL.md
 
 [Service]
 Type=oneshot
