@@ -19,6 +19,10 @@ AGENTS=(
   lackeys-tasks
   nova-02ef
 )
+SKILLS=(
+  autoresearch canvas defuddle obsidian-bases obsidian-markdown save think
+  wiki-cli wiki-fold wiki-ingest wiki-lint wiki-mode wiki-query wiki-retrieve wiki
+)
 
 require_root() {
   test "$(id -u)" -eq 0 || { echo 'must run as root' >&2; exit 1; }
@@ -46,6 +50,26 @@ unmount_one() {
   fi
 }
 
+install_skill_links() {
+  local home=$1 skill target link
+  install -d -m 0700 -o codex-pilot -g codex-pilot "$home/.agents/skills"
+  for skill in "${SKILLS[@]}"; do
+    target="$home/.agents/skills/$skill"
+    link="../../.vendor/claude-obsidian/skills/$skill"
+    if test -L "$target"; then
+      test "$(readlink "$target")" = "$link" || {
+        echo "unexpected Wiki skill link: $target" >&2
+        exit 1
+      }
+    elif test -e "$target"; then
+      echo "existing non-symlink blocks Wiki skill: $target" >&2
+      exit 1
+    else
+      ln -s "$link" "$target"
+    fi
+  done
+}
+
 start() {
   require_root
   for agent in "${AGENTS[@]}"; do
@@ -53,6 +77,7 @@ start() {
     test "$(realpath "$home")" = "$home"
     mount_one "$WIKI_ROOT" "$home/workspace/cee-wiki"
     mount_one "$CORE_ROOT" "$home/.vendor/claude-obsidian" 1
+    install_skill_links "$home"
   done
 }
 
