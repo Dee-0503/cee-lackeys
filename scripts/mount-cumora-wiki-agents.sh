@@ -33,10 +33,10 @@ require_root() {
 
 mount_one() {
   local source=$1 target=$2 readonly=${3:-0}
-  install -d -m 0700 -o codex-pilot -g codex-pilot "$target"
   if mountpoint -q "$target"; then
     return
   fi
+  install -d -m 0700 -o codex-pilot -g codex-pilot "$target"
   mount --bind "$source" "$target"
   if test "$readonly" = 1; then
     mount -o remount,bind,ro "$target"
