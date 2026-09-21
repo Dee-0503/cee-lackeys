@@ -2,7 +2,7 @@
 
 ## 已核验的限制
 
-当前 Cumora pilot 的 `server` 以 `10001:10001` 运行，默认只挂载 `runtime.mjs`、`secrets` 和 uploads。宿主 `/home/cee/data/cumora-pilot` 为 `root:root`、`750`；Postgres/Redis 目录由专用容器用户管理。不要把 canonical Vault 放进这些目录，也不要为了让 Agent 写文件而放宽数据库目录权限。
+当前 Cumora pilot 的 Web `server` 以 `10001:10001` 运行，默认只挂载 `runtime.mjs`、`secrets` 和 uploads。9 个 BYOA Agent 则由宿主 `codex-pilot` 运行，每个 Agent 的 Codex home 位于 `/home/cee/data/codex-pilot/.cumora/agents/<agent-id>`，Codex `workspace-write` 只把 Agent home 作为受控文件边界。宿主 `/home/cee/data/cumora-pilot` 为 `root:root`、`750`；Postgres/Redis 目录由专用容器用户管理。不要把 canonical Vault 放进这些 Cumora 数据库目录，也不要为了让 Agent 写文件而放宽数据库目录权限。
 
 ## 推荐目录
 
@@ -10,7 +10,7 @@
 
 ```text
 /home/cee/data/cee-wiki/
-├── canonical/                 # Wiki worker 独占读写；不挂到 Cumora server
+├── canonical/                 # 9 个 BYOA Agent 的唯一读写源；不挂到 Cumora Web server
 ├── published/
 │   ├── <revision>/vault/       # 不可变发布包
 │   └── current -> <revision>   # 原子发布指针
@@ -18,9 +18,13 @@
     └── inbox/                 # Cumora 只写草稿提交包
 ```
 
-`published/` 整体以 `:ro` 挂载，不能只挂 `current` 目录，否则替换 `current` 指针后既有 bind mount 可能仍然指向旧 inode。应用读取 `/app/wiki-published/current`，并以 manifest 的 revision 回传版本。
+当前阶段不启用桌面镜像链。`canonical/` 通过 `mount-cumora-wiki-agents.sh` 映射到每个 Agent 的 `workspace/cee-wiki`，Wiki core 只读映射到 `.vendor/claude-obsidian`；9 个 Agent 直接在 canonical 上查询和修改。systemd 服务负责在服务器重启后恢复挂载。
 
-`submissions/inbox/` 可以给 Cumora `server` 单独一个可写 bind mount，但只能承载符合 `docs/wiki/submit-package.schema.json` 的草稿提交包。它不是 canonical 的写入口；应用不应在此路径直接修改正式页。
+第二阶段才启用 `published/` 只读镜像和 `submissions/inbox/` 草稿提交；它们不参与当前 Agent 写入链。
+
+未来启用桌面链时，`published/` 整体以 `:ro` 挂载，不能只挂 `current` 目录，否则替换 `current` 指针后既有 bind mount 可能仍然指向旧 inode。应用读取 `/app/wiki-published/current`，并以 manifest 的 revision 回传版本。
+
+第二阶段的 `submissions/inbox/` 才给 Cumora `server` 单独一个可写 bind mount，只承载符合 `docs/wiki/submit-package.schema.json` 的草稿提交包。当前阶段它不是 Agent 的写入口；Agent 直接写 `workspace/cee-wiki` 映射下的 canonical Vault。
 
 ## 宿主权限建议
 

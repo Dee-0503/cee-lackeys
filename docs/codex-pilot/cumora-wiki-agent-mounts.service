@@ -1,0 +1,18 @@
+[Unit]
+Description=Mount canonical cee-wiki and fixed Wiki core into Cumora BYOA agents
+After=local-fs.target
+Before=cumora-byoa-pilot.service
+RequiresMountsFor=/home/cee/data/codex-pilot/.cumora/agents /home/cee/data/cee-wiki
+ConditionPathExists=/home/cee/data/cee-wiki/canonical
+ConditionPathExists=/home/cee/data/cee-wiki/core
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/home/cee/apps/cee-lackeys/scripts/mount-cumora-wiki-agents.sh start
+ExecStop=/home/cee/apps/cee-lackeys/scripts/mount-cumora-wiki-agents.sh stop
+TimeoutStartSec=30
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
