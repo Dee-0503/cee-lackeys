@@ -15,9 +15,9 @@ x-app: &app
     PORT: '5181'
     INSTANCE_ID: cumora-pilot
     REDIS_URL: redis://redis:6379
-    ENABLE_SCANNER: 'false'
-    ENABLE_IDLE: 'false'
-    IDLE_INTERVAL_MS: '0'
+    ENABLE_SCANNER: 'true'
+    ENABLE_IDLE: 'true'
+    IDLE_INTERVAL_MS: '900000'
     ENABLE_AGENT_POD_GC: 'false'
     ENABLE_CHROME_PVC_GC: 'false'
     ENABLE_CLUSTER_MONITOR: 'false'

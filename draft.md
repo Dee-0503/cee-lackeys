@@ -37,34 +37,35 @@
 
 # 待办
 
-1. *治理本地 cee-wiki*
-   - *清点 projects/、research/、memory/、agent-config/ 等目录。*
-     - *将稳定知识迁入 wiki/，保留原始材料和开发资料。*
-     - *通过 Wiki transaction、索引更新和 lint 验证。*
-2. *确定云端部署边界*
-   - *分离 canonical Vault、cee-lackeys 运行包和本地开发资料。*
-     - *明确服务器实际需要的 Wiki core、Skills、运行脚本和 Vault 数据。*
-3. *部署并验收云端 cee-lackeys*
-   - *部署 Agent 配置、Wiki 能力、Cumora 接入和调度运行环境。*
-     - *核对配置版本、Skill 来源锁定和热更新状态。*
-4. *完成 Wiki 云端单一维护链*
+1. *~~治理本地 cee-wiki~~*
+   - *~~清点 projects/、research/、memory/、agent-config/ 等目录。~~*
+     - *~~将稳定知识迁入 wiki/，保留原始材料和开发资料。~~*
+     - *~~通过 Wiki transaction、索引更新和 lint 验证。~~*
+2. *~~确定云端部署边界~~*
+   - *~~分离 canonical Vault、cee-lackeys 运行包和本地开发资料。~~*
+     - *~~明确服务器实际需要的 Wiki core、Skills、运行脚本和 Vault 数据。~~*
+3. *~~部署并验收云端 cee-lackeys~~*
+   - *~~部署 Agent 配置、Wiki 能力、Cumora 接入和调度运行环境。~~*
+     - *~~核对配置版本、Skill 来源锁定和热更新状态。~~*
+4. 专属服务器迁移
+5. *完成 Wiki 云端单一维护链*
    - *服务器 canonical Wiki。*
      - *桌面端只读镜像和草稿提交。*
      - *测试冲突、重复提交、重启恢复和回滚。*
-5. 本地env、API-Key文件服务器复用（gh）
-6. 验收 Cumora 原生 Kanban / Calendar
+6. 本地env、API-Key文件服务器复用（gh）
+7. 验收 Cumora 原生 Kanban / Calendar
    - 验证截止日期、负责人、提醒和事件更新。
      - 落实 Theo 的个人待办、Iris 的大型任务看板和各 Agent 的专业卡片维护。
-7. 完成 Orca 双端工程协作
+8. 完成 Orca 双端工程协作
    - 验证桌面与云端 Orca 项目映射。
      - 确认服务器 CLI、外部沙箱、权限和结果回传链路。
-8. 第二阶段建设会议录音能力
+9. 第二阶段建设会议录音能力
    - 部署 Whisper 转写、音频存储和保留策略。
      - 会议助手提取纪要和待办，再交给 Sage 入库、Theo 跟进。
-9. 补齐主动订阅和提醒基础设施
-   - 调度、去重、失败重试、发送记录和恢复机制。
-     - 邮件通知如启用，再配置 Resend。
-10. RSS 订阅与主动跟踪
+10. 补齐主动订阅和提醒基础设施
+    - 调度、去重、失败重试、发送记录和恢复机制。
+      - 邮件通知如启用，再配置 Resend。
+11. RSS 订阅与主动跟踪
 这部分由 Echo 负责运行，Theo 只接收需要用户处理的事项，Sage 负责将筛选后的重要内容入库。
 需要建设：
     - 订阅源注册表：RSS 地址、主题、频率、时区、通知级别、暂停和取消状态。
@@ -80,5 +81,5 @@
       - 需要深入研究：转给 Atlas。
     - 原始 RSS 内容保存到原始来源区或订阅缓存，不把所有更新直接写入 Wiki。
     - 网页正文只在 RSS 摘要不足时再抓取，优先使用 RSS 和低成本读取，不依赖 Firecrawl。
-11. 造一个桌面端MCP-参考别人开源的Chatgpt 网页版读桌面端的MCP
+12. 造一个桌面端MCP-参考别人开源的Chatgpt 网页版读桌面端的MCP
 

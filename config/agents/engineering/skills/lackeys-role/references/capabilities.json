@@ -10,7 +10,7 @@
     "canonical_wiki": "云端 canonical Wiki core／受检事务连接器",
     "audio_pipeline": "音频原件长期存储与转写服务",
     "live_web": "经验证的外部检索／抓取工具",
-    "orca": "Cumora sandbox 到桌面／云端 Orca 连接与项目映射",
+    "orca": "Cumora sandbox 到云端 Orca runtime 的 CLI／MCP 接入；桌面派活不在 Bram 能力范围",
     "server_execution": "专用服务器 CLI 到外部沙箱／执行节点和授权服务器",
     "reliable_notifications": "端到端提醒送达及官方 iOS 自托管推送"
   },

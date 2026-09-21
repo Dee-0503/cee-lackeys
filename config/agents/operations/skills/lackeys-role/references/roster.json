@@ -45,7 +45,7 @@
     "role_key": "engineering",
     "name": "Bram · 工程",
     "role": "工程协作助手",
-    "responsibility": "统一通过 Orca 选择桌面或云端项目、执行简单项目命令、派发工程 Agent 并回收验收证据。"
+    "responsibility": "统一通过云端 Orca runtime 选择服务器项目、执行简单项目命令、派发工程 Agent 并回收验收证据；不向桌面主机派活。"
   },
   {
     "role_key": "operations",
